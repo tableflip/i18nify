@@ -72,7 +72,7 @@ The domain of your messages. Default "messages".
 ## Tell me more
 Internationalizing an app comes at a cost; it can reduce the readability of templates, and affect the run-time performance of the app. `gettext` has some limitations but is well supported and has been successfully helping translate apps for years.
 
-As such, the i18nify translate is a small part of a bigger i18n implementation that aims to:
+As such, the i18nify transform is a small part of a bigger i18n implementation that aims to:
 
 - Use a gettext compatible api.
 - Handle simple translations, pluralisation and date formatting.
