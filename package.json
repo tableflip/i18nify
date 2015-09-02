@@ -1,0 +1,33 @@
+{
+  "name": "@tableflip/i18nify",
+  "version": "0.0.0",
+  "description": "Browserify transform for build time i18n using browserify",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tableflip/i18nify.git"
+  },
+  "keywords": [
+    "i18n",
+    "jed",
+    "gettext",
+    "ngettext"
+  ],
+  "author": "TABLEFLIP",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tableflip/i18nify/issues"
+  },
+  "homepage": "https://github.com/tableflip/i18nify#readme",
+  "dependencies": {
+    "jed": "^1.1.0",
+    "through2": "^2.0.0",
+    "trumpet": "^1.7.1"
+  },
+  "devDependencies": {
+    "standard": "^5.1.1"
+  }
+}
