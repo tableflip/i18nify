@@ -79,8 +79,8 @@ As such, the i18nify transform is a small part of a bigger i18n implementation t
 - Keep the HTML templates as clear and readable as possible.
 - As much as possible, do the work of translating up front, at build time.
 
-**SOLD! SHOW ME AN EXAMPLE APP!**
-https://github.com/tableflip/i18n-browserify
+**SOLD! SHOW ME AN EXAMPLE APP!**  
+[https://github.com/tableflip/i18n-browserify](https://github.com/tableflip/i18n-browserify)
 
 ### gettext
 The `gettext` api supports simple text-replacement translations and locale-sensitive pluralization. This app uses [jed.js](http://slexaxton.github.io/Jed/) to provided a `gettext` compatible api for front-end code.
@@ -116,13 +116,18 @@ Standard handlebars style variable substitution is supported, so:
 The translation is done first, and then the templates standard variable substitution fills out the `{{name}}` at run time...
 
 ### Simple translations at build time
-The `data-i18n` magic is done at build time. The `118ify` transform is used with browserify to process the templates, translating the text content of the elements before handing over to the handlebars transform, that converts the html into a javascript function. As the translation happens before the templates are compiled, the standard handlebars variable substitution still works, even within phrases that are translated.
+The `data-i18n` magic is done at build time. The `i18ify` transform is used with browserify to process the templates, translating the text content of the elements before handing over to the handlebars transform, that converts the html into a javascript function. As the translation happens before the templates are compiled, the standard handlebars variable substitution still works, even within phrases that are translated.
 
 As such these translations are done up-front, before deployment, creating language specific app bundles, via browserify:
 
 ```sh
 "bundle_es": "browserify app.js -o dist/es/bundle.js -t [ i18ify --lang es ] -t hbsfy",
 ```
+
+#### In code Jed translations at build time
+If you use a jed compatible API and call your localisation var `i18n`, the i18nify transform will also translate calls to simple translations in your code.
+
+For example, `i18n.translate('some key').fetch()` will be replaced with `'some key'` (or the translation for "some key").
 
 ### Context sensitive translations at runtime
 Some phrases can only be translated when we know the value of the variables in them. The most common case is pluralisation, where the number of things changes at run time, _"There is 1 new alert"_ vs _"There are 3 new alerts"_

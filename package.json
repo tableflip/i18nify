@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/tableflip/i18nify#readme",
   "dependencies": {
+    "duplexer": "^0.1.1",
     "jed": "^1.1.0",
+    "split": "^1.0.0",
     "through2": "^2.0.0",
     "trumpet": "^1.7.1"
   },
