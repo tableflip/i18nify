@@ -26,7 +26,7 @@ module.exports = function (file, opts) {
 
     // Replace the contents with the translation
     elem.createReadStream()
-      .pipe(translator(dict, opts.domain))
+      .pipe(translator(dict, file, opts))
       .pipe(elem.createWriteStream())
   })
 
@@ -39,12 +39,21 @@ function isHtml (file) {
 }
 
 // a transform stream to replace text with translated text
-function translator (dict, domain) {
-  var locale = i18n(dict, domain)
-  return through(function (buf, enc, next) {
-    var key = buf.toString('utf8').trim()
-    var result = locale.translate(key).fetch()
-    this.push(result || key)
-    next()
-  })
+function translator (dict, file, opts) {
+  var locale = i18n(dict, opts.domain)
+  var key = ''
+
+  return through(
+    function (buf, enc, next) {
+      key += buf.toString('utf8').trim()
+      next()
+    },
+    function (next) {
+      if (!key) return next(new Error('Empty translation key in file ' + file))
+
+      var result = locale.translate(key).fetch()
+      this.push(result || key)
+      next()
+    }
+  )
 }
