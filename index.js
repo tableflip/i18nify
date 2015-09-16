@@ -1,59 +1,19 @@
-/*
-* i18ify - used at build time to replace text in templates.
-*/
 var fs = require('fs')
 var path = require('path')
-var through = require('through2')
-var trumpet = require('trumpet')
-var i18n = require('./i18n')
+var duplexer = require('duplexer')
+var markup = require('./markup')
+var code = require('./code')
 
 module.exports = function (file, opts) {
-  if (!isHtml(file)) return through()
-
   opts = opts || {}
 
-  var baseDir = process.cwd()
-  var dictPath = path.join(opts.path || baseDir, opts.lang, 'dict.json')
+  var dictPath = path.join(opts.path || process.cwd(), opts.lang, 'dict.json')
   var dict = JSON.parse(fs.readFileSync(dictPath))
-  var key = path.relative(baseDir, file)
-  var tr = trumpet()
 
-  // Find elements to translate
-  tr.selectAll('[data-i18n]', function (elem) {
+  var mu = markup(dict, file, opts)
+  var co = code(dict, file, opts)
 
-    // Add the file path id as the value of the `data-i18n attribute
-    elem.setAttribute('data-i18n', key)
+  mu.pipe(co)
 
-    // Replace the contents with the translation
-    elem.createReadStream()
-      .pipe(translator(dict, file, opts))
-      .pipe(elem.createWriteStream())
-  })
-
-  return tr
-}
-
-// Are you html or hbs?
-function isHtml (file) {
-  return /\.(html|hbs)$/.test(file)
-}
-
-// a transform stream to replace text with translated text
-function translator (dict, file, opts) {
-  var locale = i18n(dict, opts.domain)
-  var key = ''
-
-  return through(
-    function (buf, enc, next) {
-      key += buf.toString('utf8').trim()
-      next()
-    },
-    function (next) {
-      if (!key) return next(new Error('Empty translation key in file ' + file))
-
-      var result = locale.translate(key).fetch()
-      this.push(result || key)
-      next()
-    }
-  )
+  return duplexer(mu, co)
 }
