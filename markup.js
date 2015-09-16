@@ -41,10 +41,12 @@ function translator (dict, file, opts) {
 
   return through(
     function (buf, enc, next) {
-      key += buf.toString('utf8').trim()
+      key += buf.toString('utf8')
       next()
     },
     function (next) {
+      key = key.trim()
+
       if (!key) return next(new Error('Empty translation key in file ' + file))
 
       var result = locale.translate(key).fetch()
