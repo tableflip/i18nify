@@ -1,6 +1,6 @@
 {
   "name": "@tableflip/i18nify",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Browserify transform for build time i18n using browserify",
   "main": "index.js",
   "scripts": {
