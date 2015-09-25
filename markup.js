@@ -13,6 +13,7 @@ module.exports = function (dict, file, opts) {
 
   var key = path.relative(process.cwd(), file)
   var tr = trumpet()
+  var locale = i18n(dict, opts.domain)
 
   // Find elements to translate
   tr.selectAll('[data-i18n]', function (elem) {
@@ -22,8 +23,29 @@ module.exports = function (dict, file, opts) {
 
     // Replace the contents with the translation
     elem.createReadStream()
-      .pipe(translator(dict, file, opts))
+      .pipe(translator(locale, file, opts))
       .pipe(elem.createWriteStream())
+  })
+
+  tr.selectAll('[data-i18n-attr]', function (elem) {
+
+    // Get the list of attributes we should translate
+    elem.getAttribute('data-i18n-attr', function (attrs) {
+
+      // Translate each attribute
+      attrs.split(' ').forEach(function (attr) {
+        elem.getAttribute(attr, function (key) {
+          key = key.trim()
+
+          if (!key) throw new Error('Empty translation key in file ' + file)
+
+          var result = locale.translate(key).fetch()
+          elem.setAttribute(attr, result || key)
+        })
+      })
+
+      elem.removeAttribute('data-i18n-attr')
+    })
   })
 
   return tr
@@ -35,8 +57,7 @@ function isMarkup (file) {
 }
 
 // a transform stream to replace text with translated text
-function translator (dict, file, opts) {
-  var locale = i18n(dict, opts.domain)
+function translator (locale, file, opts) {
   var key = ''
 
   return through(
