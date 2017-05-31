@@ -236,3 +236,7 @@ i18n
 - https://github.com/substack/browserify-handbook
 - http://momentjs.com/#multiple-locale-support
 - http://www.jeromesteunou.net/internationalisation-in-javascript.html
+
+----
+
+A [(╯°□°）╯︵TABLEFLIP](https://tableflip.io) side project.

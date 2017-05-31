@@ -17,7 +17,6 @@ module.exports = function (dict, file, opts) {
 
   // Find elements to translate
   tr.selectAll('[data-i18n]', function (elem) {
-
     // Add the file path id as the value of the `data-i18n attribute
     elem.setAttribute('data-i18n', key)
 
@@ -28,10 +27,8 @@ module.exports = function (dict, file, opts) {
   })
 
   tr.selectAll('[data-i18n-attr]', function (elem) {
-
     // Get the list of attributes we should translate
     elem.getAttribute('data-i18n-attr', function (attrs) {
-
       // Translate each attribute
       attrs.split(' ').forEach(function (attr) {
         elem.getAttribute(attr, function (key) {
